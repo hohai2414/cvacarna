@@ -58,7 +58,7 @@ export default function LoginPage() {
             )}
             
             <Button type="submit" className="w-full font-semibold" disabled={loading}>
-              {loading ? 'Sending...' : 'Send Magic Link'}
+              {loading ? 'Entering...' : 'Enter (Auto Login)'}
             </Button>
           </form>
         </CardContent>

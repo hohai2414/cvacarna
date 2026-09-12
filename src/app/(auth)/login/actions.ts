@@ -7,16 +7,25 @@ export async function login(formData: FormData) {
   const email = formData.get('email') as string
   const supabase = await createClient()
 
-  const { error } = await supabase.auth.signInWithOtp({
+  const dummyPassword = 'CareerArcana123!@#_user'
+
+  // Cố gắng đăng nhập
+  let { error } = await supabase.auth.signInWithPassword({
     email,
-    options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
-    },
+    password: dummyPassword,
   })
 
+  // Nếu chưa có tài khoản, tự động tạo mới
   if (error) {
-    return { error: error.message }
+    const { error: signUpError } = await supabase.auth.signUp({
+      email,
+      password: dummyPassword,
+    })
+
+    if (signUpError) {
+      return { error: signUpError.message }
+    }
   }
 
-  return { success: 'Check your email for the login link!' }
+  redirect('/dashboard')
 }
