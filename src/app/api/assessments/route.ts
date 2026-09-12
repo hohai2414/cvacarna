@@ -84,7 +84,7 @@ export async function POST(request: Request) {
       ${document.redacted_text}
     `
 
-    const completion = await openai.beta.chat.completions.parse({
+    const completion = await (openai.beta as any).chat.completions.parse({
       model: "gpt-4o-2024-08-06",
       messages: [
         { role: "system", content: "You are a precise, unbiased evidence-based recruiter AI." },
@@ -124,7 +124,7 @@ export async function POST(request: Request) {
     if (assessmentError) throw assessmentError
 
     // Insert criteria
-    const criteriaRecords = assessmentResult.criteria.map(c => ({
+    const criteriaRecords = assessmentResult.criteria.map((c: z.infer<typeof CriterionSchema>) => ({
       assessment_id: assessment.id,
       criterion_name: c.criterion_name,
       weight: c.weight,

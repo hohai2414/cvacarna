@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/utils/supabase/server'
-import pdfParse from 'pdf-parse'
 import { v4 as uuidv4 } from 'uuid'
+import { PDFParse } from 'pdf-parse'
 
 export async function POST(request: Request) {
   try {
@@ -57,7 +57,8 @@ export async function POST(request: Request) {
     let extractedText = ''
 
     if (file.type === 'application/pdf') {
-      const data = await pdfParse(buffer)
+      const parseFunc = PDFParse as unknown as Function;
+      const data = await parseFunc(buffer);
       extractedText = data.text
     } else {
       // In a real app, support DOC/DOCX parsing (e.g., using mammoth)
