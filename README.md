@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Career Arcana
 
-## Getting Started
+Career Arcana is a Mystic Professional Applicant Tracking System (ATS) built with Next.js 15. It uniquely combines an evidence-based Job Match AI feature for Recruiters with a fun, introspective Career Tarot and Numerology experience.
 
-First, run the development server:
+## Features
 
+- **Evidence-Based Job Match**: Upload a candidate's CV (PDF) and define a Job Description. Our AI (OpenAI GPT-4o) evaluates the CV against your criteria and extracts direct quotes as evidence.
+- **Data Privacy & Redaction**: Basic PII redaction ensures fair AI evaluation. Role Level Security (RLS) ensures organizations only see their own data.
+- **Career Tarot & Numerology**: A purely entertainment and self-reflection module for candidates or recruiters to explore career archetypes (e.g., The Builder, The Strategist) and Life Path numbers. 
+
+## Tech Stack
+- Frontend: Next.js 15 (App Router), React 19, Tailwind CSS v4, shadcn/ui
+- Backend: Supabase (Auth, Postgres DB, Storage)
+- AI & Validation: OpenAI SDK, Zod, pdf-parse
+- Styling: Custom "Mystic Professional" theme (Navy and Champagne Gold)
+
+## Prerequisites
+- Node.js (v18+)
+- A [Supabase](https://supabase.com/) account
+- An [OpenAI](https://openai.com/) API Key
+
+## Setup Instructions
+
+### 1. Supabase Setup
+1. Create a new project in Supabase.
+2. Go to the SQL Editor and execute the code found in `supabase/migrations/20240101000000_init.sql`. This sets up tables, RLS, and triggers.
+3. In Supabase Storage, create a new **Private** bucket named `candidate-documents`.
+4. Run the SQL in `supabase/seed.sql` to populate some mock organization data.
+5. Setup Email Auth in Supabase Authentication settings (Enable Magic Link).
+
+### 2. Local Environment Variables
+Create a `.env.local` file at the root of the project by copying `.env.example`:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
 ```
+Fill in the credentials:
+- `NEXT_PUBLIC_SUPABASE_URL`: From Supabase Project Settings -> API
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: From Supabase Project Settings -> API
+- `SUPABASE_SERVICE_ROLE_KEY`: From Supabase Project Settings -> API (Used only securely on the server)
+- `OPENAI_API_KEY`: Your OpenAI API Key
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Install & Run
+```bash
+npm install
+npm run dev
+```
+Open `http://localhost:3000/login` to sign in.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment
+This project is ready to be deployed to Vercel. 
+Simply push to GitHub, import into Vercel, and add the same Environment Variables you used in `.env.local`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Unit Testing
+Run tests using Vitest (to be installed) or your preferred test runner for the Numerology logic in `src/lib/numerology.test.ts`.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Disclaimer
+> Tarot và thần số học trong ứng dụng này chỉ nhằm mục đích giải trí và tự phản tư. Kết quả không phải là phép đo tâm lý đã được xác thực, không phản ánh năng lực nghề nghiệp và không được sử dụng để sàng lọc, xếp hạng hoặc đưa ra quyết định tuyển dụng.
