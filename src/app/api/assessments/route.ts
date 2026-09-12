@@ -4,9 +4,8 @@ import OpenAI from 'openai'
 import { z } from 'zod'
 import { zodResponseFormat } from 'openai/helpers/zod'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+// OpenAI client will be instantiated inside the request handler to prevent build-time crashes
+
 
 const CriterionSchema = z.object({
   criterion_name: z.string(),
@@ -40,6 +39,9 @@ const AssessmentSchema = z.object({
 
 export async function POST(request: Request) {
   try {
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY || 'dummy-key-to-prevent-build-crash',
+    })
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
